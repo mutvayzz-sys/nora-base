@@ -23,7 +23,7 @@ function formatPlanLabel(plan, t) {
     .trim()
     .toLowerCase();
   if (normalized === "selfhosted") return t("Self-hosted");
-  if (!normalized) return t("Free");
+  if (!normalized || normalized === "free") return t("Free");
   return normalized.charAt(0).toUpperCase() + normalized.slice(1);
 }
 
@@ -58,8 +58,9 @@ function describeDefaultAgentCap(user, t) {
     return t("Leave blank to restore the admin default of unlimited.");
   }
   if (Number.isInteger(user?.base_agent_limit)) {
-    return (
-      t("Leave blank to use the default cap of") + " " + formatCount(user.base_agent_limit) + "."
+    return t("Leave blank to use the default cap of {count}.").replace(
+      "{count}",
+      formatCount(user.base_agent_limit),
     );
   }
   return t("Leave blank to use the default cap.");
@@ -103,7 +104,7 @@ function formatBackupCap(user, t) {
   const count = user?.backup_limit_per_agent == null ? t("Unlimited") : user.backup_limit_per_agent;
   const storage = user?.backup_storage_mb == null ? t("unlimited") : `${user.backup_storage_mb} MB`;
   const retention = user?.backup_retention_days || 0;
-  return `${count} ${t("per agent")} · ${storage} · ${retention}d`;
+  return `${count} ${t("per agent")} · ${storage} · ${t("{count}d").replace("{count}", String(retention))}`;
 }
 
 export default function UsersPage() {
@@ -176,7 +177,10 @@ export default function UsersPage() {
     const label = user.email || user.id;
     if (
       !window.confirm(
-        `${t("Delete")} ${label}? ${t("This will remove the account and clean up owned agents.")}`,
+        t("Delete {user}? This will remove the account and clean up owned agents.").replace(
+          "{user}",
+          label,
+        ),
       )
     ) {
       return;
@@ -337,7 +341,7 @@ export default function UsersPage() {
           </button>
         </header>
 
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4" data-no-translate>
           <MetricCard
             label={t("Total Users")}
             value={formatCount(users.length)}
@@ -481,7 +485,7 @@ export default function UsersPage() {
                             {formatCount(user.agentCount)}
                           </span>
                         </td>
-                        <td className="px-2 py-4">
+                        <td className="px-2 py-4" data-no-translate>
                           <div className="min-w-[16rem]">
                             <p className="text-sm font-semibold text-slate-950">
                               {formatAgentCap(user, t)}
@@ -535,14 +539,17 @@ export default function UsersPage() {
                               ) : null}
                             </div>
 
-                            <p className="mt-2 text-[11px] font-medium text-slate-500">
+                            <p
+                              className="mt-2 text-[11px] font-medium text-slate-500"
+                              data-no-translate
+                            >
                               {describeDefaultAgentCap(user, t)}
                             </p>
                           </div>
                         </td>
                         <td className="px-2 py-4">
                           <div className="min-w-[18rem]">
-                            <p className="text-sm font-semibold text-slate-950">
+                            <p className="text-sm font-semibold text-slate-950" data-no-translate>
                               {formatBackupCap(user, t)}
                             </p>
                             <p className="mt-1 text-[11px] font-semibold text-slate-400">

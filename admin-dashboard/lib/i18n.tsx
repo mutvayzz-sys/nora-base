@@ -24,7 +24,14 @@ export const LOCALE_LABELS: Record<Locale, string> = {
 
 const TRANSLATIONS = {
   es: {
+    Inactive: "Inactivo",
     ...REMOTE_HOST_TRANSLATIONS.es,
+    "Leave blank to use the default cap of {count}.":
+      "Deja en blanco para usar el limite predeterminado de {count}.",
+    "Delete {user}? This will remove the account and clean up owned agents.":
+      "¿Eliminar {user}? Esto eliminara la cuenta y limpiara los agentes propios.",
+    "{count}d": "{count}d",
+
     "Nora Admin": "Admin de Nora",
     "Full platform control": "Control total de la plataforma",
     Overview: "Resumen",
@@ -173,7 +180,6 @@ const TRANSLATIONS = {
     "Default user cap": "Limite de usuario predeterminado",
     "Leave blank to restore the admin default of unlimited.":
       "Deja en blanco para restaurar el valor predeterminado de admin: ilimitado.",
-    "Leave blank to use the default cap of": "Deja en blanco para usar el limite predeterminado de",
     "Leave blank to use the default cap.": "Deja en blanco para usar el limite predeterminado.",
     "Default cap:": "Limite predeterminado:",
     "Unlimited default": "Predeterminado ilimitado",
@@ -192,7 +198,14 @@ const TRANSLATIONS = {
     "Save backups": "Guardar copias",
   },
   fr: {
+    Inactive: "Inactif",
     ...REMOTE_HOST_TRANSLATIONS.fr,
+    "Leave blank to use the default cap of {count}.":
+      "Laissez vide pour utiliser la limite par defaut de {count}.",
+    "Delete {user}? This will remove the account and clean up owned agents.":
+      "Supprimer {user} ? Cela supprimera le compte et nettoiera les agents possedes.",
+    "{count}d": "{count}j",
+
     "Nora Admin": "Admin Nora",
     "Full platform control": "Controle complet de la plateforme",
     Overview: "Vue d'ensemble",
@@ -341,7 +354,6 @@ const TRANSLATIONS = {
     "Default user cap": "Limite utilisateur par defaut",
     "Leave blank to restore the admin default of unlimited.":
       "Laissez vide pour restaurer le defaut admin : illimite.",
-    "Leave blank to use the default cap of": "Laissez vide pour utiliser la limite par defaut de",
     "Leave blank to use the default cap.": "Laissez vide pour utiliser la limite par defaut.",
     "Default cap:": "Limite par defaut :",
     "Unlimited default": "Defaut illimite",
@@ -353,14 +365,20 @@ const TRANSLATIONS = {
     "per agent": "par agent",
     "Plan/default": "Plan/defaut",
     "Plan default": "Defaut du plan",
-    Enabled: "Active",
+    Enabled: "Activé",
     Count: "Nombre",
     "Storage MB": "Stockage Mo",
     "Retention days": "Jours de retention",
     "Save backups": "Enregistrer les sauvegardes",
   },
   "zh-Hans": {
+    Inactive: "未活动",
     ...REMOTE_HOST_TRANSLATIONS["zh-Hans"],
+    "Leave blank to use the default cap of {count}.": "留空以使用默认上限 {count}。",
+    "Delete {user}? This will remove the account and clean up owned agents.":
+      "删除 {user}？这将删除该账户并清理其拥有的代理。",
+    "{count}d": "{count}天",
+
     "Nora Admin": "Nora 管理",
     "Full platform control": "完整平台控制",
     Overview: "概览",
@@ -466,7 +484,6 @@ const TRANSLATIONS = {
     "Failed to update role": "更新角色失败",
     "Role updated": "角色已更新",
     Delete: "删除",
-    "This will remove the account and clean up owned agents.": "这将删除该账户并清理其拥有的代理。",
     "Failed to delete user": "删除用户失败",
     "User deleted": "用户已删除",
     "Failed to update agent cap": "更新代理上限失败",
@@ -505,7 +522,6 @@ const TRANSLATIONS = {
     "Admin default": "管理员默认",
     "Default user cap": "默认用户上限",
     "Leave blank to restore the admin default of unlimited.": "留空以恢复管理员默认值：无限制。",
-    "Leave blank to use the default cap of": "留空以使用默认上限",
     "Leave blank to use the default cap.": "留空以使用默认上限。",
     "Default cap:": "默认上限：",
     "Unlimited default": "默认无限制",
@@ -524,7 +540,13 @@ const TRANSLATIONS = {
     "Save backups": "保存备份",
   },
   "zh-Hant": {
+    Inactive: "未啟用",
     ...REMOTE_HOST_TRANSLATIONS["zh-Hant"],
+    "Leave blank to use the default cap of {count}.": "留空以使用預設上限 {count}。",
+    "Delete {user}? This will remove the account and clean up owned agents.":
+      "刪除 {user}？這會移除該帳戶並清理其擁有的代理。",
+    "{count}d": "{count}天",
+
     "Nora Admin": "Nora 管理",
     "Full platform control": "完整平台控制",
     Overview: "概覽",
@@ -630,7 +652,6 @@ const TRANSLATIONS = {
     "Failed to update role": "更新角色失敗",
     "Role updated": "角色已更新",
     Delete: "刪除",
-    "This will remove the account and clean up owned agents.": "這會移除該帳戶並清理其擁有的代理。",
     "Failed to delete user": "刪除使用者失敗",
     "User deleted": "使用者已刪除",
     "Failed to update agent cap": "更新代理上限失敗",
@@ -669,7 +690,6 @@ const TRANSLATIONS = {
     "Admin default": "管理員預設",
     "Default user cap": "預設使用者上限",
     "Leave blank to restore the admin default of unlimited.": "留空以還原管理員預設值：無限制。",
-    "Leave blank to use the default cap of": "留空以使用預設上限",
     "Leave blank to use the default cap.": "留空以使用預設上限。",
     "Default cap:": "預設上限：",
     "Unlimited default": "預設無限制",
