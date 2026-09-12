@@ -405,7 +405,10 @@ function EventCard({ event }) {
               label={t("Deleted Assets")}
               value={
                 metadata.result?.deletedAgentCount
-                  ? `${t("Deleted")} ${metadata.result.deletedAgentCount} ${t("owned agents")}`
+                  ? t("Deleted {count} owned agents").replace(
+                      "{count}",
+                      String(metadata.result.deletedAgentCount),
+                    )
                   : metadata.result?.deleted
                     ? t("Deleted")
                     : null
@@ -615,7 +618,7 @@ export default function AuditPage() {
 
   return (
     <AdminLayout>
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-8" data-no-translate>
         <header className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
           <div>
             <p className="text-[11px] font-black uppercase tracking-[0.2em] text-red-500">
@@ -752,8 +755,10 @@ export default function AuditPage() {
           <div className="mt-5 flex flex-col gap-3 border-t border-slate-100 pt-5 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex flex-wrap items-center gap-3 text-sm font-medium text-slate-500">
               <span>
-                {t("Showing")} {formatCount(pageStart)}-{formatCount(pageEnd)} {t("of")}{" "}
-                {formatCount(totalRecords)} {t("events")}
+                {t("Showing {start}-{end} of {total} events")
+                  .replace("{start}", formatCount(pageStart))
+                  .replace("{end}", formatCount(pageEnd))
+                  .replace("{total}", formatCount(totalRecords))}
               </span>
               {refreshing ? (
                 <span className="inline-flex items-center gap-2 text-red-500">
@@ -805,7 +810,9 @@ export default function AuditPage() {
 
           <div className="mt-6 flex flex-col gap-4 border-t border-slate-100 pt-5 lg:flex-row lg:items-center lg:justify-between">
             <div className="text-sm font-medium text-slate-500">
-              {t("Page")} {formatCount(currentPage)} {t("of")} {formatCount(totalPages)}
+              {t("Page {page} of {total}")
+                .replace("{page}", formatCount(currentPage))
+                .replace("{total}", formatCount(totalPages))}
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
