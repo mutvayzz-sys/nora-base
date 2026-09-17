@@ -96,13 +96,20 @@ function MyApp({ Component, pageProps }) {
     return startHeadmasterBridge({ view: "platform-administration" });
   }, []);
 
+  // The Headmaster launch staging page must be reachable without an existing
+  // session — the gate would bounce it (and the whole launch exchange) to the
+  // marketing login before the bridge could answer.
+  const content = Component.isHeadmasterLaunchPage ? (
+    <Component {...pageProps} />
+  ) : (
+    <AdminAccessGate>
+      <Component {...pageProps} />
+    </AdminAccessGate>
+  );
+
   return (
     <I18nProvider>
-      <ToastProvider>
-        <AdminAccessGate>
-          <Component {...pageProps} />
-        </AdminAccessGate>
-      </ToastProvider>
+      <ToastProvider>{content}</ToastProvider>
     </I18nProvider>
   );
 }

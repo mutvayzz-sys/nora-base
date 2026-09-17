@@ -30,6 +30,8 @@ type InboundMessage = HelloMessage | LaunchInitMessage | LaunchCodeMessage;
 export type HeadmasterBridgeOptions = {
   /** Fixed iframe path family for this bundle: "runtime-operations" or "platform-administration". */
   view: "runtime-operations" | "platform-administration";
+  /** Where to send this window after a successful launch redemption. */
+  entryPath?: string;
   /** Extra readiness check; defaults to GET /api/auth/me role === "admin". */
   verifyReady?: () => Promise<{ ready: boolean; role: string | null }>;
 };
@@ -168,20 +170,36 @@ async function redeemLaunchCode(code: string): Promise<boolean> {
   }
 }
 
-export function markEmbeddedAndReload() {
+/**
+ * Navigate to the real entry point after a successful redemption. The launch
+ * page is a pre-auth staging surface and must not simply reload.
+ */
+export function completeHeadmasterLaunch(entryPath?: string) {
   setEmbeddedFlag();
-  // Full reload so the authenticated shell replaces the signed-out render.
-  window.location.reload();
+  // Head to the real entry point authenticated (the launch page is a
+  // pre-auth staging surface and must not be reloaded).
+  window.location.assign(entryPath && entryPath.startsWith("/") ? entryPath : "/");
 }
+
+let bridgeInstalled = false;
 
 /**
  * Install the bridge message listener. Returns a cleanup function.
  * No-op unless the parent origin is configured AND we are actually framed.
+ * Singleton: only the first installer on a document is active, so a launch
+ * page and the app shell never double-answer.
  */
 export function startHeadmasterBridge(options: HeadmasterBridgeOptions): () => void {
   if (typeof window === "undefined") return () => {};
+  if (bridgeInstalled) return () => {};
   const parentOrigin = getHeadmasterParentOrigin();
   if (!parentOrigin) return () => {};
+  try {
+    if (window.self === window.top) return () => {};
+  } catch {
+    // Cross-origin access threw — we are framed.
+  }
+  bridgeInstalled = true;
 
   let browserNonce: string | null = null;
   let launchInFlight = false;
@@ -244,7 +262,7 @@ export function startHeadmasterBridge(options: HeadmasterBridgeOptions): () => v
       const ok = Boolean(browserNonce) && (await redeemLaunchCode(message.code));
       browserNonce = null;
       if (ok) {
-        markEmbeddedAndReload();
+        completeHeadmasterLaunch(options.entryPath);
       } else {
         window.parent.postMessage(
           { type: "headmaster:nora:launch-error", nonce: message.nonce, reason: "redeem_failed" },
