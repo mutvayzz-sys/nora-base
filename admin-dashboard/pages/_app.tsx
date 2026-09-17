@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Loader2, ShieldAlert } from "lucide-react";
 import { ToastProvider } from "../components/Toast";
 import { I18nProvider, useI18n } from "../lib/i18n";
+import { startHeadmasterBridge } from "../lib/headmaster";
 
 function AdminAccessGate({ children }) {
   const { dashboardPath, loginPath, t } = useI18n();
@@ -89,6 +90,12 @@ function AdminAccessGate({ children }) {
 }
 
 function MyApp({ Component, pageProps }) {
+  useEffect(() => {
+    // Presentation/readiness + launch bridge. No-op unless the app is framed
+    // by the configured build-time Headmaster parent origin.
+    return startHeadmasterBridge({ view: "platform-administration" });
+  }, []);
+
   return (
     <I18nProvider>
       <ToastProvider>
