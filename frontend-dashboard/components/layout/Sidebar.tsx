@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import {
   LayoutDashboard,
+  ShieldCheck,
   Bot,
   Rocket,
   BarChart3,
@@ -30,6 +32,8 @@ type NavItem = {
   icon: typeof LayoutDashboard;
   href: string;
   selfHostedOnly?: boolean;
+  /** Shown only to platform administrators; navigates within the same origin. */
+  adminOnly?: boolean;
 };
 
 const REPO_URL = "https://github.com/solomon2773/nora";
@@ -48,6 +52,7 @@ const NAV_ITEMS: NavItem[] = [
   { name: "Workspaces", icon: FolderOpen, href: "/app/workspaces" },
   { name: "Monitoring", icon: BarChart3, href: "/app/monitoring" },
   { name: "Logs", icon: ScrollText, href: "/app/logs" },
+  { name: "Platform administration", icon: ShieldCheck, href: "/admin/", adminOnly: true },
 ];
 
 export default function Sidebar({
@@ -58,8 +63,25 @@ export default function Sidebar({
 }: SidebarProps) {
   const router = useRouter();
   const { localizePath, t } = useI18n();
+  const [isPlatformAdmin, setIsPlatformAdmin] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/auth/me", { credentials: "include" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((user) => {
+        if (active && user?.role === "admin") setIsPlatformAdmin(true);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
+
   const navItems = NAV_ITEMS.filter(
-    (item) => !item.selfHostedOnly || platformMode === "selfhosted",
+    (item) =>
+      (!item.selfHostedOnly || platformMode === "selfhosted") &&
+      (!item.adminOnly || isPlatformAdmin),
   );
 
   const isActive = (path) => {

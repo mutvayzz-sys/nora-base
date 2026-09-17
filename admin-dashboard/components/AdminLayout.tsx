@@ -160,6 +160,12 @@ export default function AdminLayout({ children }) {
 
           <div className="border-t border-brand-cyan/10 p-3 md:mt-auto md:p-4">
             <a
+              href="/app/dashboard"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-brand-cyan/12 px-4 py-3 text-sm font-semibold text-brand-foreground/72 transition-colors hover:bg-brand-cyan/10 hover:text-brand-foreground"
+            >
+              {t("Runtime operations")}
+            </a>
+            <a
               href="https://github.com/solomon2773/nora"
               target="_blank"
               rel="noreferrer"
