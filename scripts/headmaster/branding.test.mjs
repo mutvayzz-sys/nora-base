@@ -191,6 +191,12 @@ test("launch exchange backend wiring is present and fail-closed", async () => {
   assert.match(launch, /httpOnly: true/, "session cookie stays HttpOnly");
   assert.match(launch, /HEADMASTER_LAUNCH_TTL_SECONDS, 60, 30, 120/, "launch code TTL ~60s");
   assert.match(launch, /HEADMASTER_REVALIDATE_SECONDS, 25, 10, 30/, "revalidation bound <= 30s");
+  assert.match(
+    launch,
+    /HEADMASTER_SESSION_TTL_SECONDS, 12 \* 60 \* 60/,
+    "hm session lifetime is capped (bounded staleness)",
+  );
+  assert.match(launch, /expiresIn: SESSION_TTL_SECONDS/, "JWT expiry matches the session record TTL");
   assert.match(launch, /authorization_unavailable/, "storage outages fail closed");
   assert.match(launch, /registerPrivilegedSocket/, "live privileged sockets are tracked");
   assert.match(launch, /revokeHeadmasterSessions/, "revocation entry point exists");

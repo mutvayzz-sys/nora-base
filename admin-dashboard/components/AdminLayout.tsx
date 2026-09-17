@@ -134,7 +134,7 @@ export default function AdminLayout({ children }) {
                   className={clsx(
                     "inline-flex items-center gap-3 whitespace-nowrap rounded-2xl px-4 py-3 text-sm font-semibold transition-all",
                     active
-                      ? "bg-red-600 text-white shadow-lg shadow-red-600/20"
+                      ? "hm-admin-active"
                       : "text-brand-foreground/64 hover:bg-brand-cyan/10 hover:text-brand-foreground",
                   )}
                 >

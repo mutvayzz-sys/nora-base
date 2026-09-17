@@ -29,7 +29,11 @@ const IS_TEST_ENV = process.env.NODE_ENV === "test" || !!process.env.JEST_WORKER
 
 const CODE_TTL_SECONDS = clampInt(process.env.HEADMASTER_LAUNCH_TTL_SECONDS, 60, 30, 120);
 const REVALIDATE_SECONDS = clampInt(process.env.HEADMASTER_REVALIDATE_SECONDS, 25, 10, 30);
-const SESSION_TTL_SECONDS = 7 * 24 * 60 * 60; // mirrors the native JWT lifetime
+// Headmaster-launched sessions live shorter than native ones by default: the
+// GCAP side has no admin session-enumeration API, so liveness revalidation
+// covers role/suspension while this TTL bounds any stale binding. Re-launch
+// from the workspace renews it.
+const SESSION_TTL_SECONDS = clampInt(process.env.HEADMASTER_SESSION_TTL_SECONDS, 12 * 60 * 60, 300, 7 * 24 * 60 * 60);
 const REVOKE_CHANNEL = "hm:chan:revoke";
 const KEY = {
   code: (hash) => `hm:code:${hash}`,
@@ -678,7 +682,7 @@ async function issueHeadmasterSession(res, req, identity) {
       jti,
     },
     process.env.JWT_SECRET,
-    { expiresIn: "7d", algorithm: "HS256" },
+    { expiresIn: SESSION_TTL_SECONDS, algorithm: "HS256" },
   );
   // Cross-site iframe context: SameSite=None (+Partitioned for browsers that
   // gate third-party cookies) and always Secure behind HTTPS.
