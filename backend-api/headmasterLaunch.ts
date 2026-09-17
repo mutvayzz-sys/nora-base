@@ -678,7 +678,7 @@ async function issueHeadmasterSession(res, req, identity) {
       jti,
     },
     process.env.JWT_SECRET,
-    { expiresIn: "7d", algorithm: "HS256", jwtid: jti },
+    { expiresIn: "7d", algorithm: "HS256" },
   );
   // Cross-site iframe context: SameSite=None (+Partitioned for browsers that
   // gate third-party cookies) and always Secure behind HTTPS.
